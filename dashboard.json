@@ -546,7 +546,12 @@
       "thresholds": [],
       "title": "Latest Status (1=Passed, 0=Failed)",
       "yAxisUnit": "none",
-      "visibleRows": "auto"
+      "visibleRows": "auto",
+      "customColTitles": {
+        "cicd_test_case_service": "Service",
+        "A": "Status",
+        "F1": "Availability %"
+      }
     },
     {
       "bucketCount": 30,
@@ -669,7 +674,12 @@
       "thresholds": [],
       "title": "Availability % per Service",
       "yAxisUnit": "%",
-      "visibleRows": "auto"
+      "visibleRows": "auto",
+      "customColTitles": {
+        "cicd_test_case_service": "Service",
+        "A": "Status",
+        "F1": "Availability %"
+      }
     }
   ]
 }
