@@ -31,6 +31,7 @@ export function QueryTable({
 	columnWidths,
 	onColumnWidthsChange,
 	panelType,
+	visibleRows,
 	...props
 }: QueryTableProps): JSX.Element {
 	const { isDownloadEnabled = false, fileName = '' } = downloadOption || {};
@@ -132,11 +133,17 @@ export function QueryTable({
 		[tableColumns, isQueryTypeBuilder, enableDrillDown, handleColumnClick],
 	);
 
-	const paginationConfig = {
-		pageSize: 10,
-		showSizeChanger: false,
-		hideOnSinglePage: true,
-	};
+	const paginationConfig = useMemo(() => {
+		if (visibleRows === 'auto') {
+			// Show all rows without pagination
+			return false as const;
+		}
+		return {
+			pageSize: typeof visibleRows === 'number' ? visibleRows : 10,
+			showSizeChanger: false,
+			hideOnSinglePage: true,
+		};
+	}, [visibleRows]);
 
 	const [filterTable, setFilterTable] = useState<RowData[] | null>(null);
 

@@ -30,4 +30,6 @@ export type QueryTableProps = Omit<
 	contextLinks?: ContextLinksData;
 	panelType?: PANEL_TYPES;
 	queryRangeRequest?: QueryRangeRequestV5;
+	/** Number of visible rows. Use "auto" to fill panel height, or a number. Default: 10 */
+	visibleRows?: number | 'auto';
 };

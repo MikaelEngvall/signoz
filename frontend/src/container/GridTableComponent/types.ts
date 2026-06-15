@@ -33,6 +33,8 @@ export type GridTableComponentProps = {
 	panelType?: PANEL_TYPES;
 	queryRangeRequest?: QueryRangeRequestV5;
 	hiddenColumns?: string[];
+	/** Number of visible rows. Use "auto" to fill panel height, or a number. Default: 10 */
+	visibleRows?: number | 'auto';
 } & Pick<LogsExplorerTableProps, 'data'> &
 	Omit<TableProps<RowData>, 'columns' | 'dataSource'>;
 
