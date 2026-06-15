@@ -360,6 +360,7 @@ export enum PANEL_TYPES {
 	BAR = 'bar',
 	PIE = 'pie',
 	HISTOGRAM = 'histogram',
+	TEXT = 'text',
 	EMPTY_WIDGET = 'EMPTY_WIDGET',
 }
 
