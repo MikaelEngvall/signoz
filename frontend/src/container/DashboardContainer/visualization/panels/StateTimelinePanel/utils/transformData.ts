@@ -65,6 +65,8 @@ function buildSegments(
 	timeRange: TimeRange,
 	thresholds: ThresholdProps[],
 	defaultColor: string,
+	treatZeroAsNull = false,
+	globalFirstRealDataTime?: number,
 ): SegmentData[] {
 	if (values.length === 0) {
 		return [];
@@ -75,35 +77,23 @@ function buildSegments(
 	const tsNeedsConversion = firstTs > 1e12 && timeRange.start < 1e12;
 	const normalizeTs = (ts: number): number => tsNeedsConversion ? ts / 1000 : ts;
 
-	if (values.length === 1) {
-		const numericValue = parseValue(values[0].value);
-		const evalResult: ThresholdEvalResult = evaluateThreshold(
-			numericValue,
-			thresholds,
-			defaultColor,
-		);
-		return [
-			{
-				startTime: normalizeTs(values[0].timestamp),
-				endTime: timeRange.end,
-				value: numericValue,
-				color: evalResult.color,
-				thresholdLabel: evalResult.label,
-			},
-		];
-	}
-
 	const segments: SegmentData[] = [];
 
 	for (let i = 0; i < values.length; i++) {
-		const numericValue = parseValue(values[i].value);
+		let numericValue = parseValue(values[i].value);
+		const startTime = normalizeTs(values[i].timestamp);
+
+		// Treat zeros before the global data-start cutoff as "No Data"
+		if (treatZeroAsNull && numericValue === 0 && globalFirstRealDataTime && startTime < globalFirstRealDataTime) {
+			numericValue = null;
+		}
+
 		const evalResult: ThresholdEvalResult = evaluateThreshold(
 			numericValue,
 			thresholds,
 			defaultColor,
 		);
 
-		const startTime = normalizeTs(values[i].timestamp);
 		const endTime =
 			i < values.length - 1 ? normalizeTs(values[i + 1].timestamp) : timeRange.end;
 
@@ -112,12 +102,11 @@ function buildSegments(
 			endTime,
 			value: numericValue,
 			color: evalResult.color,
-			thresholdLabel: evalResult.label,
+			thresholdLabel: numericValue === null ? 'No Data' : evalResult.label,
 		});
 	}
 
 	// Merge consecutive segments with the same color (same state)
-	// This produces wider segments like Grafana does
 	return mergeConsecutiveSegments(segments);
 }
 
@@ -171,8 +160,13 @@ export function transformSeriesToSwimLanes(
 	thresholds: ThresholdProps[],
 	isDarkMode: boolean,
 	legendTemplate?: string,
+	treatZeroAsNull = true,
 ): SwimLaneModel {
 	const defaultColor = isDarkMode ? DEFAULT_COLOR_DARK : DEFAULT_COLOR_LIGHT;
+
+	// Normalize timestamps helper (defined once, reused)
+	const normalizeTs = (ts: number): number =>
+		ts > 1e12 && timeRange.start < 1e12 ? ts / 1000 : ts;
 
 	// Step 1: Extract all series from all query data entries
 	const allSeries: { series: SeriesItem; legend?: string }[] = [];
@@ -186,7 +180,26 @@ export function transformSeriesToSwimLanes(
 		}
 	}
 
-	// Step 2: Resolve labels and build rows
+	// Step 2: Find the GLOBAL first non-zero timestamp across all series
+	// This is where real data collection started — same for all services
+	let globalFirstRealDataTime = timeRange.end;
+	if (treatZeroAsNull) {
+		for (const { series } of allSeries) {
+			if (!series.values || series.values.length === 0) continue;
+			for (const val of series.values) {
+				const v = parseValue(val.value);
+				if (v !== null && v !== 0) {
+					const ts = normalizeTs(val.timestamp);
+					if (ts < globalFirstRealDataTime) {
+						globalFirstRealDataTime = ts;
+					}
+					break; // only need the first non-zero per series
+				}
+			}
+		}
+	}
+
+	// Step 3: Resolve labels and build rows
 	const rows: SwimLaneRowData[] = [];
 
 	for (const { series, legend } of allSeries) {
@@ -200,11 +213,14 @@ export function transformSeriesToSwimLanes(
 		const label = resolveSeriesLabel(series, effectiveTemplate);
 
 		// Step 4 & 5: Build segments with threshold evaluation
+		// Use the global cutoff so all rows have the same grey area
 		const segments = buildSegments(
 			series.values,
 			timeRange,
 			thresholds,
 			defaultColor,
+			treatZeroAsNull,
+			globalFirstRealDataTime,
 		);
 
 		rows.push({
@@ -214,7 +230,7 @@ export function transformSeriesToSwimLanes(
 		});
 	}
 
-	// Step 3: Sort alphabetically (case-insensitive)
+	// Step 6: Sort alphabetically (case-insensitive)
 	rows.sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
 
 	return {

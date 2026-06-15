@@ -40,7 +40,7 @@ export function evaluateOperator(
 const THRESHOLD_COLOR_MAP: Record<string, string> = {
 	Green: '#73BF69',
 	Red: '#F2495C',
-	Yellow: '#FF9830',
+	Yellow: '#FADE2A',
 	Orange: '#FF9830',
 	Blue: '#5794F2',
 };

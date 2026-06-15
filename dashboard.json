@@ -1,14 +1,58 @@
 {
   "description": "BOS service health overview using State Timeline swim-lanes. One panel shows all services at a glance.",
   "layout": [
-    {"h": 3, "i": "86ba5be8-d053-43c0-9564-94f6268d12a6", "moved": false, "static": false, "w": 9, "x": 0, "y": 0},
-    {"h": 3, "i": "0ee8f9a4-02e9-425b-b01a-d2c9f7296cdb", "moved": false, "static": false, "w": 3, "x": 9, "y": 0},
-    {"h": 20, "i": "307f34f1-64c8-4a1b-85ab-b2c2836fdd6f", "moved": false, "static": false, "w": 3, "x": 0, "y": 3},
-    {"h": 20, "i": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d", "moved": false, "static": false, "w": 6, "x": 3, "y": 3},
-    {"h": 20, "i": "d1e17bb9-a578-46b3-96f5-b90ce5916c51", "moved": false, "static": false, "w": 3, "x": 9, "y": 3}
+    {
+      "h": 3,
+      "i": "86ba5be8-d053-43c0-9564-94f6268d12a6",
+      "moved": false,
+      "static": false,
+      "w": 9,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "h": 3,
+      "i": "0ee8f9a4-02e9-425b-b01a-d2c9f7296cdb",
+      "moved": false,
+      "static": false,
+      "w": 3,
+      "x": 9,
+      "y": 0
+    },
+    {
+      "h": 20,
+      "i": "307f34f1-64c8-4a1b-85ab-b2c2836fdd6f",
+      "moved": false,
+      "static": false,
+      "w": 3,
+      "x": 0,
+      "y": 3
+    },
+    {
+      "h": 20,
+      "i": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "moved": false,
+      "static": false,
+      "w": 6,
+      "x": 3,
+      "y": 3
+    },
+    {
+      "h": 20,
+      "i": "d1e17bb9-a578-46b3-96f5-b90ce5916c51",
+      "moved": false,
+      "static": false,
+      "w": 3,
+      "x": 9,
+      "y": 3
+    }
   ],
   "panelMap": {},
-  "tags": ["epos", "health-check", "state-timeline"],
+  "tags": [
+    "epos",
+    "health-check",
+    "state-timeline"
+  ],
   "title": "Health-Check Overview (State Timeline)",
   "uploadedGrafana": false,
   "version": "v5",
@@ -17,7 +61,9 @@
       "bucketCount": 30,
       "bucketWidth": 0,
       "columnUnits": {},
-      "contextLinks": {"linksData": []},
+      "contextLinks": {
+        "linksData": []
+      },
       "customLegendColors": {},
       "decimalPrecision": 0,
       "description": "Average verdict across all services (1.0=all pass, 0.5=half failing, 0.0=all fail). Green>=95%, Yellow>=50%, Red<50%.",
@@ -29,35 +75,75 @@
       "lineInterpolation": "step",
       "lineStyle": "solid",
       "mergeAllActiveQueries": false,
-      "nullZeroValues": "zero",
+      "nullZeroValues": "blank",
       "opacity": "80",
       "panelTypes": "state_timeline",
       "query": {
         "builder": {
-          "queryData": [{
-            "aggregateAttribute": {"dataType": "float64", "id": "cicd_pipeline_test_verdict--float64--Gauge--true", "isColumn": true, "isJSON": false, "key": "cicd_pipeline_test_verdict", "type": "Gauge"},
-            "aggregateOperator": "latest",
-            "dataSource": "metrics",
-            "disabled": false,
-            "expression": "A",
-            "filters": {"items": [{"id": "filter-bos-group", "key": {"dataType": "string", "id": "cicd_test_case_group--string--tag--false", "isColumn": false, "isJSON": false, "key": "cicd_test_case_group", "type": "tag"}, "op": "=", "value": "BOS"}], "op": "AND"},
-            "functions": [],
-            "groupBy": [],
-            "having": [],
-            "legend": "All Services",
-            "limit": null,
-            "orderBy": [],
-            "queryName": "A",
-            "reduceTo": "last",
-            "spaceAggregation": "avg",
-            "stepInterval": 900,
-            "timeAggregation": "latest"
-          }],
+          "queryData": [
+            {
+              "aggregateAttribute": {
+                "dataType": "float64",
+                "id": "cicd_pipeline_test_verdict--float64--Gauge--true",
+                "isColumn": true,
+                "isJSON": false,
+                "key": "cicd_pipeline_test_verdict",
+                "type": "Gauge"
+              },
+              "aggregateOperator": "latest",
+              "dataSource": "metrics",
+              "disabled": false,
+              "expression": "A",
+              "filters": {
+                "items": [
+                  {
+                    "id": "filter-bos-group",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_group--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_group",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "BOS"
+                  }
+                ],
+                "op": "AND"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": [],
+              "legend": "All Services",
+              "limit": null,
+              "orderBy": [],
+              "queryName": "A",
+              "reduceTo": "last",
+              "spaceAggregation": "avg",
+              "stepInterval": 900,
+              "timeAggregation": "latest"
+            }
+          ],
           "queryFormulas": []
         },
-        "clickhouse_sql": [{"disabled": false, "legend": "", "name": "A", "query": ""}],
+        "clickhouse_sql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": ""
+          }
+        ],
         "id": "query-86ba5be8-combined-status",
-        "promql": [{"disabled": false, "legend": "", "name": "A", "query": "avg(min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}))"}],
+        "promql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": "avg(min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}))"
+          }
+        ],
         "queryType": "builder",
         "unit": ""
       },
@@ -69,9 +155,24 @@
       "spanGaps": false,
       "stackedBarChart": false,
       "thresholds": [
-        {"thresholdColor": "Green", "thresholdFormat": "fixed", "thresholdOperator": ">=", "thresholdValue": 1},
-        {"thresholdColor": "Yellow", "thresholdFormat": "fixed", "thresholdOperator": ">=", "thresholdValue": 0.8},
-        {"thresholdColor": "Red", "thresholdFormat": "fixed", "thresholdOperator": "<", "thresholdValue": 0.8}
+        {
+          "thresholdColor": "Green",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": ">=",
+          "thresholdValue": 1
+        },
+        {
+          "thresholdColor": "Yellow",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": ">=",
+          "thresholdValue": 0.8
+        },
+        {
+          "thresholdColor": "Red",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": "<",
+          "thresholdValue": 0.8
+        }
       ],
       "title": "Combined Status (All Services)",
       "yAxisUnit": "none"
@@ -80,7 +181,9 @@
       "bucketCount": 30,
       "bucketWidth": 0,
       "columnUnits": {},
-      "contextLinks": {"linksData": []},
+      "contextLinks": {
+        "linksData": []
+      },
       "customLegendColors": {},
       "decimalPrecision": 1,
       "description": "Overall availability across all BOS services. Green >= 99%, Yellow >= 80%, Red < 80%.",
@@ -97,30 +200,77 @@
       "panelTypes": "value",
       "query": {
         "builder": {
-          "queryData": [{
-            "aggregateAttribute": {"dataType": "float64", "id": "cicd_pipeline_test_verdict--float64--Gauge--true", "isColumn": true, "isJSON": false, "key": "cicd_pipeline_test_verdict", "type": "Gauge"},
-            "aggregateOperator": "avg",
-            "dataSource": "metrics",
-            "disabled": false,
-            "expression": "A",
-            "filters": {"items": [{"id": "filter-bos-group", "key": {"dataType": "string", "id": "cicd_test_case_group--string--tag--false", "isColumn": false, "isJSON": false, "key": "cicd_test_case_group", "type": "tag"}, "op": "=", "value": "BOS"}], "op": "AND"},
-            "functions": [],
-            "groupBy": [],
-            "having": [],
-            "legend": "Availability",
-            "limit": null,
-            "orderBy": [],
-            "queryName": "A",
-            "reduceTo": "avg",
-            "spaceAggregation": "min",
-            "stepInterval": 3600,
-            "timeAggregation": "avg"
-          }],
-          "queryFormulas": [{"disabled": false, "expression": "A * 100", "legend": "Availability %", "queryName": "F1"}]
+          "queryData": [
+            {
+              "aggregateAttribute": {
+                "dataType": "float64",
+                "id": "cicd_pipeline_test_verdict--float64--Gauge--true",
+                "isColumn": true,
+                "isJSON": false,
+                "key": "cicd_pipeline_test_verdict",
+                "type": "Gauge"
+              },
+              "aggregateOperator": "avg",
+              "dataSource": "metrics",
+              "disabled": false,
+              "expression": "A",
+              "filters": {
+                "items": [
+                  {
+                    "id": "filter-bos-group",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_group--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_group",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "BOS"
+                  }
+                ],
+                "op": "AND"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": [],
+              "legend": "Availability",
+              "limit": null,
+              "orderBy": [],
+              "queryName": "A",
+              "reduceTo": "avg",
+              "spaceAggregation": "min",
+              "stepInterval": 3600,
+              "timeAggregation": "avg"
+            }
+          ],
+          "queryFormulas": [
+            {
+              "disabled": false,
+              "expression": "A * 100",
+              "legend": "Availability %",
+              "queryName": "F1"
+            }
+          ]
         },
-        "clickhouse_sql": [{"disabled": false, "legend": "", "name": "A", "query": ""}],
+        "clickhouse_sql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": ""
+          }
+        ],
         "id": "query-0ee8f9a4-overall-availability",
-        "promql": [{"disabled": false, "legend": "Availability %", "name": "A", "query": "avg(avg by (cicd_test_case_service) (avg_over_time(cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}[3d]))) * 100"}],
+        "promql": [
+          {
+            "disabled": false,
+            "legend": "Availability %",
+            "name": "A",
+            "query": "avg(avg by (cicd_test_case_service) (avg_over_time(cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}[3d]))) * 100"
+          }
+        ],
         "queryType": "promql",
         "unit": ""
       },
@@ -132,9 +282,24 @@
       "spanGaps": true,
       "stackedBarChart": false,
       "thresholds": [
-        {"thresholdColor": "Green", "thresholdFormat": "fixed", "thresholdOperator": ">=", "thresholdValue": 99},
-        {"thresholdColor": "Yellow", "thresholdFormat": "fixed", "thresholdOperator": ">=", "thresholdValue": 80},
-        {"thresholdColor": "Red", "thresholdFormat": "fixed", "thresholdOperator": "<", "thresholdValue": 80}
+        {
+          "thresholdColor": "Green",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": ">=",
+          "thresholdValue": 99
+        },
+        {
+          "thresholdColor": "Yellow",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": ">=",
+          "thresholdValue": 80
+        },
+        {
+          "thresholdColor": "Red",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": "<",
+          "thresholdValue": 80
+        }
       ],
       "title": "Overall Availability (All Services)",
       "yAxisUnit": "%"
@@ -143,7 +308,9 @@
       "bucketCount": 30,
       "bucketWidth": 0,
       "columnUnits": {},
-      "contextLinks": {"linksData": []},
+      "contextLinks": {
+        "linksData": []
+      },
       "customLegendColors": {},
       "decimalPrecision": 0,
       "description": "All BOS services rendered as horizontal swim-lane rows. Green = passing (>=0.5), Red = failing (<0.5). Each row is one service, colored segments show state over time.",
@@ -155,35 +322,84 @@
       "lineInterpolation": "step",
       "lineStyle": "solid",
       "mergeAllActiveQueries": false,
-      "nullZeroValues": "zero",
+      "nullZeroValues": "blank",
       "opacity": "1",
       "panelTypes": "state_timeline",
       "query": {
         "builder": {
-          "queryData": [{
-            "aggregateAttribute": {"dataType": "float64", "id": "cicd_pipeline_test_verdict--float64--Gauge--true", "isColumn": true, "isJSON": false, "key": "cicd_pipeline_test_verdict", "type": "Gauge"},
-            "aggregateOperator": "latest",
-            "dataSource": "metrics",
-            "disabled": false,
-            "expression": "A",
-            "filters": {"items": [{"id": "filter-bos-group", "key": {"dataType": "string", "id": "cicd_test_case_group--string--tag--false", "isColumn": false, "isJSON": false, "key": "cicd_test_case_group", "type": "tag"}, "op": "=", "value": "BOS"}], "op": "AND"},
-            "functions": [],
-            "groupBy": [{"dataType": "string", "id": "cicd_test_case_service--string--tag--false", "isColumn": false, "isJSON": false, "key": "cicd_test_case_service", "type": "tag"}],
-            "having": [],
-            "legend": "{{cicd_test_case_service}}",
-            "limit": 30,
-            "orderBy": [],
-            "queryName": "A",
-            "reduceTo": "last",
-            "spaceAggregation": "min",
-            "stepInterval": 900,
-            "timeAggregation": "latest"
-          }],
+          "queryData": [
+            {
+              "aggregateAttribute": {
+                "dataType": "float64",
+                "id": "cicd_pipeline_test_verdict--float64--Gauge--true",
+                "isColumn": true,
+                "isJSON": false,
+                "key": "cicd_pipeline_test_verdict",
+                "type": "Gauge"
+              },
+              "aggregateOperator": "latest",
+              "dataSource": "metrics",
+              "disabled": false,
+              "expression": "A",
+              "filters": {
+                "items": [
+                  {
+                    "id": "filter-bos-group",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_group--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_group",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "BOS"
+                  }
+                ],
+                "op": "AND"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "dataType": "string",
+                  "id": "cicd_test_case_service--string--tag--false",
+                  "isColumn": false,
+                  "isJSON": false,
+                  "key": "cicd_test_case_service",
+                  "type": "tag"
+                }
+              ],
+              "having": [],
+              "legend": "{{cicd_test_case_service}}",
+              "limit": 30,
+              "orderBy": [],
+              "queryName": "A",
+              "reduceTo": "last",
+              "spaceAggregation": "min",
+              "stepInterval": 900,
+              "timeAggregation": "latest"
+            }
+          ],
           "queryFormulas": []
         },
-        "clickhouse_sql": [{"disabled": false, "legend": "", "name": "A", "query": ""}],
+        "clickhouse_sql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": ""
+          }
+        ],
         "id": "query-state-timeline-all",
-        "promql": [{"disabled": false, "legend": "{{cicd_test_case_service}}", "name": "A", "query": "min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"})"}],
+        "promql": [
+          {
+            "disabled": false,
+            "legend": "{{cicd_test_case_service}}",
+            "name": "A",
+            "query": "min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"})"
+          }
+        ],
         "queryType": "builder",
         "unit": ""
       },
@@ -195,8 +411,18 @@
       "spanGaps": false,
       "stackedBarChart": false,
       "thresholds": [
-        {"thresholdColor": "Green", "thresholdFormat": "fixed", "thresholdOperator": ">=", "thresholdValue": 0.5},
-        {"thresholdColor": "Red", "thresholdFormat": "fixed", "thresholdOperator": "<", "thresholdValue": 0.5}
+        {
+          "thresholdColor": "Green",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": ">=",
+          "thresholdValue": 0.5
+        },
+        {
+          "thresholdColor": "Red",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": "<",
+          "thresholdValue": 0.5
+        }
       ],
       "title": "Service Status Timeline (All BOS Services)",
       "yAxisUnit": "none"
@@ -205,8 +431,13 @@
       "bucketCount": 30,
       "bucketWidth": 0,
       "columnUnits": {},
-      "columnWidths": {"A": 145, "cicd_test_case_service": 145},
-      "contextLinks": {"linksData": []},
+      "columnWidths": {
+        "A": 145,
+        "cicd_test_case_service": 145
+      },
+      "contextLinks": {
+        "linksData": []
+      },
       "customLegendColors": {},
       "decimalPrecision": 0,
       "description": "Latest test verdict per service (1=Passed, 0=Failed).",
@@ -223,30 +454,79 @@
       "panelTypes": "table",
       "query": {
         "builder": {
-          "queryData": [{
-            "aggregateAttribute": {"dataType": "float64", "id": "cicd_pipeline_test_verdict--float64--Gauge--true", "isColumn": true, "isJSON": false, "key": "cicd_pipeline_test_verdict", "type": "Gauge"},
-            "aggregateOperator": "latest",
-            "dataSource": "metrics",
-            "disabled": false,
-            "expression": "A",
-            "filters": {"items": [{"id": "filter-bos-group", "key": {"dataType": "string", "id": "cicd_test_case_group--string--tag--false", "isColumn": false, "isJSON": false, "key": "cicd_test_case_group", "type": "tag"}, "op": "=", "value": "BOS"}], "op": "AND"},
-            "functions": [],
-            "groupBy": [{"dataType": "string", "id": "cicd_test_case_service--string--tag--false", "isColumn": false, "isJSON": false, "key": "cicd_test_case_service", "type": "tag"}],
-            "having": [],
-            "legend": "{{cicd_test_case_service}}",
-            "limit": 30,
-            "orderBy": [],
-            "queryName": "A",
-            "reduceTo": "last",
-            "spaceAggregation": "min",
-            "stepInterval": 900,
-            "timeAggregation": "latest"
-          }],
+          "queryData": [
+            {
+              "aggregateAttribute": {
+                "dataType": "float64",
+                "id": "cicd_pipeline_test_verdict--float64--Gauge--true",
+                "isColumn": true,
+                "isJSON": false,
+                "key": "cicd_pipeline_test_verdict",
+                "type": "Gauge"
+              },
+              "aggregateOperator": "latest",
+              "dataSource": "metrics",
+              "disabled": false,
+              "expression": "A",
+              "filters": {
+                "items": [
+                  {
+                    "id": "filter-bos-group",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_group--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_group",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "BOS"
+                  }
+                ],
+                "op": "AND"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "dataType": "string",
+                  "id": "cicd_test_case_service--string--tag--false",
+                  "isColumn": false,
+                  "isJSON": false,
+                  "key": "cicd_test_case_service",
+                  "type": "tag"
+                }
+              ],
+              "having": [],
+              "legend": "{{cicd_test_case_service}}",
+              "limit": 30,
+              "orderBy": [],
+              "queryName": "A",
+              "reduceTo": "last",
+              "spaceAggregation": "min",
+              "stepInterval": 900,
+              "timeAggregation": "latest"
+            }
+          ],
           "queryFormulas": []
         },
-        "clickhouse_sql": [{"disabled": false, "legend": "", "name": "A", "query": ""}],
+        "clickhouse_sql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": ""
+          }
+        ],
         "id": "query-307f34f1-latest-status",
-        "promql": [{"disabled": false, "legend": "", "name": "A", "query": "min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"})"}],
+        "promql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": "min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"})"
+          }
+        ],
         "queryType": "builder",
         "unit": ""
       },
@@ -265,8 +545,14 @@
       "bucketCount": 30,
       "bucketWidth": 0,
       "columnUnits": {},
-      "columnWidths": {"A": 145, "F1": 145, "cicd_test_case_service": 145},
-      "contextLinks": {"linksData": []},
+      "columnWidths": {
+        "A": 145,
+        "F1": 145,
+        "cicd_test_case_service": 145
+      },
+      "contextLinks": {
+        "linksData": []
+      },
       "customLegendColors": {},
       "decimalPrecision": 1,
       "description": "Average availability percentage per service over the selected time range (100% = always passing)",
@@ -283,30 +569,86 @@
       "panelTypes": "table",
       "query": {
         "builder": {
-          "queryData": [{
-            "aggregateAttribute": {"dataType": "float64", "id": "cicd_pipeline_test_verdict--float64--Gauge--true", "isColumn": true, "isJSON": false, "key": "cicd_pipeline_test_verdict", "type": "Gauge"},
-            "aggregateOperator": "avg",
-            "dataSource": "metrics",
-            "disabled": false,
-            "expression": "A",
-            "filters": {"items": [{"id": "filter-bos-group", "key": {"dataType": "string", "id": "cicd_test_case_group--string--tag--false", "isColumn": false, "isJSON": false, "key": "cicd_test_case_group", "type": "tag"}, "op": "=", "value": "BOS"}], "op": "AND"},
-            "functions": [],
-            "groupBy": [{"dataType": "string", "id": "cicd_test_case_service--string--tag--false", "isColumn": false, "isJSON": false, "key": "cicd_test_case_service", "type": "tag"}],
-            "having": [],
-            "legend": "{{cicd_test_case_service}}",
-            "limit": 30,
-            "orderBy": [],
-            "queryName": "A",
-            "reduceTo": "avg",
-            "spaceAggregation": "avg",
-            "stepInterval": 3600,
-            "timeAggregation": "avg"
-          }],
-          "queryFormulas": [{"disabled": false, "expression": "A * 100", "legend": "{{cicd_test_case_service}}", "queryName": "F1"}]
+          "queryData": [
+            {
+              "aggregateAttribute": {
+                "dataType": "float64",
+                "id": "cicd_pipeline_test_verdict--float64--Gauge--true",
+                "isColumn": true,
+                "isJSON": false,
+                "key": "cicd_pipeline_test_verdict",
+                "type": "Gauge"
+              },
+              "aggregateOperator": "avg",
+              "dataSource": "metrics",
+              "disabled": false,
+              "expression": "A",
+              "filters": {
+                "items": [
+                  {
+                    "id": "filter-bos-group",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_group--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_group",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "BOS"
+                  }
+                ],
+                "op": "AND"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "dataType": "string",
+                  "id": "cicd_test_case_service--string--tag--false",
+                  "isColumn": false,
+                  "isJSON": false,
+                  "key": "cicd_test_case_service",
+                  "type": "tag"
+                }
+              ],
+              "having": [],
+              "legend": "{{cicd_test_case_service}}",
+              "limit": 30,
+              "orderBy": [],
+              "queryName": "A",
+              "reduceTo": "avg",
+              "spaceAggregation": "avg",
+              "stepInterval": 3600,
+              "timeAggregation": "avg"
+            }
+          ],
+          "queryFormulas": [
+            {
+              "disabled": false,
+              "expression": "A * 100",
+              "legend": "{{cicd_test_case_service}}",
+              "queryName": "F1"
+            }
+          ]
         },
-        "clickhouse_sql": [{"disabled": false, "legend": "", "name": "A", "query": ""}],
+        "clickhouse_sql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": ""
+          }
+        ],
         "id": "query-d1e17bb9-availability",
-        "promql": [{"disabled": false, "legend": "", "name": "A", "query": "avg by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}) * 100"}],
+        "promql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": "avg by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}) * 100"
+          }
+        ],
         "queryType": "builder",
         "unit": ""
       },
