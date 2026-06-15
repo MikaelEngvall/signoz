@@ -361,6 +361,7 @@ export enum PANEL_TYPES {
 	PIE = 'pie',
 	HISTOGRAM = 'histogram',
 	STATE_TIMELINE = 'state_timeline',
+	TEXT = 'text',
 	EMPTY_WIDGET = 'EMPTY_WIDGET',
 }
 

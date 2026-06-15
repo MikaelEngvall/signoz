@@ -7,6 +7,7 @@ import { QueryParams } from 'constants/query';
 import { PANEL_TYPES } from 'constants/queryBuilder';
 import { useScrollWidgetIntoView } from 'container/DashboardContainer/visualization/hooks/useScrollWidgetIntoView';
 import { populateMultipleResults } from 'container/NewWidget/LeftContainer/WidgetGraph/util';
+import TextPanelWrapper from 'container/PanelWrapper/TextPanelWrapper';
 import { CustomTimeType } from 'container/TopNav/DateTimeSelectionV2/types';
 import { useIsPanelWaitingOnVariable } from 'hooks/dashboard/useVariableFetchState';
 import { useGetQueryRange } from 'hooks/queryBuilder/useGetQueryRange';
@@ -121,7 +122,7 @@ function GridCardGraph({
 	}, [updatedQuery, variables]);
 
 	const isEmptyWidget =
-		widget?.id === PANEL_TYPES.EMPTY_WIDGET || isEmpty(widget);
+		widget?.id === PANEL_TYPES.EMPTY_WIDGET || widget?.panelTypes === PANEL_TYPES.TEXT || isEmpty(widget);
 
 	const isPanelWaitingOnAnyVariable = useIsPanelWaitingOnVariable(
 		referencedVariableNames,
@@ -267,6 +268,7 @@ function GridCardGraph({
 	);
 
 	const isEmptyLayout = widget?.id === PANEL_TYPES.EMPTY_WIDGET;
+	const isTextPanel = widget?.panelTypes === PANEL_TYPES.TEXT;
 
 	if (queryResponse.data && widget.panelTypes === PANEL_TYPES.BAR) {
 		const sortedSeriesData = getSortedSeriesData(
@@ -291,6 +293,8 @@ function GridCardGraph({
 		<div style={{ height: '100%', width: '100%' }} ref={widgetContainerRef}>
 			{isEmptyLayout ? (
 				<EmptyWidget />
+			) : isTextPanel ? (
+				<TextPanelWrapper widget={widget} queryResponse={queryResponse} onDragSelect={(): void => {}} panelMode="view" />
 			) : (
 				<WidgetGraphComponent
 					widget={widget}

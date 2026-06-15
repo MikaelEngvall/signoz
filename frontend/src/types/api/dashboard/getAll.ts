@@ -144,6 +144,8 @@ export interface IBaseWidget {
 	spanGaps?: boolean | number;
 	/** Number of visible rows in table panels. 'auto' fills panel height. Default: 10 */
 	visibleRows?: number | 'auto';
+	/** Markdown/text content for text panel type */
+	textContent?: string;
 }
 export interface Widgets extends IBaseWidget {
 	query: Query;

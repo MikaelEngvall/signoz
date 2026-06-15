@@ -3,11 +3,20 @@
   "layout": [
     {
       "h": 3,
+      "i": "text-health-check-header",
+      "moved": false,
+      "static": false,
+      "w": 2,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "h": 3,
       "i": "86ba5be8-d053-43c0-9564-94f6268d12a6",
       "moved": false,
       "static": false,
-      "w": 9,
-      "x": 0,
+      "w": 7,
+      "x": 2,
       "y": 0
     },
     {
@@ -57,6 +66,47 @@
   "uploadedGrafana": false,
   "version": "v5",
   "widgets": [
+    {
+      "id": "text-health-check-header",
+      "panelTypes": "text",
+      "title": "",
+      "description": "",
+      "textContent": "# Health-Check",
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "bucketCount": 30,
+      "bucketWidth": 0,
+      "columnUnits": {},
+      "softMin": 0,
+      "softMax": 0,
+      "selectedLogFields": [],
+      "selectedTracesFields": [],
+      "query": {
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        },
+        "clickhouse_sql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": ""
+          }
+        ],
+        "id": "query-text-header",
+        "promql": [
+          {
+            "disabled": false,
+            "legend": "",
+            "name": "A",
+            "query": ""
+          }
+        ],
+        "queryType": "builder",
+        "unit": ""
+      }
+    },
     {
       "bucketCount": 30,
       "bucketWidth": 0,
