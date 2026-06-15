@@ -66,7 +66,7 @@ function buildSegments(
 	thresholds: ThresholdProps[],
 	defaultColor: string,
 	treatZeroAsNull = false,
-	globalFirstRealDataTime?: number,
+	leadingGapEnd?: number,
 ): SegmentData[] {
 	if (values.length === 0) {
 		return [];
@@ -79,13 +79,24 @@ function buildSegments(
 
 	const segments: SegmentData[] = [];
 
+	// Add a grey "No Data" segment at the start if there's a leading gap
+	if (leadingGapEnd && leadingGapEnd > timeRange.start) {
+		segments.push({
+			startTime: timeRange.start,
+			endTime: leadingGapEnd,
+			value: null,
+			color: defaultColor,
+			thresholdLabel: 'No Data',
+		});
+	}
+
 	for (let i = 0; i < values.length; i++) {
-		let numericValue = parseValue(values[i].value);
+		const numericValue = parseValue(values[i].value);
 		const startTime = normalizeTs(values[i].timestamp);
 
-		// Treat zeros before the global data-start cutoff as "No Data"
-		if (treatZeroAsNull && numericValue === 0 && globalFirstRealDataTime && startTime < globalFirstRealDataTime) {
-			numericValue = null;
+		// Skip data points that fall within the leading gap (already covered by grey)
+		if (leadingGapEnd && startTime < leadingGapEnd) {
+			continue;
 		}
 
 		const evalResult: ThresholdEvalResult = evaluateThreshold(
@@ -180,24 +191,22 @@ export function transformSeriesToSwimLanes(
 		}
 	}
 
-	// Step 2: Find the GLOBAL first non-zero timestamp across all series
-	// This is where real data collection started — same for all services
-	let globalFirstRealDataTime = timeRange.end;
-	if (treatZeroAsNull) {
-		for (const { series } of allSeries) {
-			if (!series.values || series.values.length === 0) continue;
-			for (const val of series.values) {
-				const v = parseValue(val.value);
-				if (v !== null && v !== 0) {
-					const ts = normalizeTs(val.timestamp);
-					if (ts < globalFirstRealDataTime) {
-						globalFirstRealDataTime = ts;
-					}
-					break; // only need the first non-zero per series
-				}
-			}
+	// Step 2: Determine if there's a leading no-data period.
+	// Only applies when the time range extends before ANY service has data.
+	// We find the earliest first data point (zero or non-zero) across all series.
+	// If that's significantly after timeRange.start, those initial zeros are gap-filled.
+	let earliestDataTimestamp = timeRange.end;
+	for (const { series } of allSeries) {
+		if (!series.values || series.values.length === 0) continue;
+		const firstTs = normalizeTs(series.values[0].timestamp);
+		if (firstTs < earliestDataTimestamp) {
+			earliestDataTimestamp = firstTs;
 		}
 	}
+
+	// Grey area: only between timeRange.start and the first actual data point
+	// (when the query window extends before data collection started)
+	const hasLeadingGap = earliestDataTimestamp - timeRange.start > 60;
 
 	// Step 3: Resolve labels and build rows
 	const rows: SwimLaneRowData[] = [];
@@ -213,14 +222,13 @@ export function transformSeriesToSwimLanes(
 		const label = resolveSeriesLabel(series, effectiveTemplate);
 
 		// Step 4 & 5: Build segments with threshold evaluation
-		// Use the global cutoff so all rows have the same grey area
 		const segments = buildSegments(
 			series.values,
 			timeRange,
 			thresholds,
 			defaultColor,
-			treatZeroAsNull,
-			globalFirstRealDataTime,
+			false,
+			hasLeadingGap ? earliestDataTimestamp : undefined,
 		);
 
 		rows.push({
