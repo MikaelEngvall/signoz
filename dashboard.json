@@ -376,7 +376,7 @@
               "orderBy": [],
               "queryName": "A",
               "reduceTo": "last",
-              "spaceAggregation": "min",
+              "spaceAggregation": "avg",
               "stepInterval": 900,
               "timeAggregation": "latest"
             }
