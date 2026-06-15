@@ -448,7 +448,7 @@ func buildLogsQuery(panelType v3.PanelType, start, end, step int64, mq *v3.Build
 	} else if panelType == v3.PanelTypeTable {
 		queryTmplPrefix =
 			"SELECT"
-	} else if panelType == v3.PanelTypeGraph || panelType == v3.PanelTypeValue {
+	} else if panelType.IsGraphLike() || panelType == v3.PanelTypeValue {
 		// Select the aggregate value for interval
 		queryTmplPrefix =
 			fmt.Sprintf("SELECT toStartOfInterval(fromUnixTimestamp64Nano(timestamp), INTERVAL %d SECOND) AS ts,", step)

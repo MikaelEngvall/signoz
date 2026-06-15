@@ -29,5 +29,6 @@ export const PANEL_TYPES_VS_FULL_VIEW_TABLE: PanelTypeAndGraphManagerVisibilityP
 		BAR: true,
 		PIE: false,
 		HISTOGRAM: false,
+		STATE_TIMELINE: false,
 		EMPTY_WIDGET: false,
 	};

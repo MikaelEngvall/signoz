@@ -48,6 +48,7 @@ export function mapPanelTypeToRequestType(panelType: PANEL_TYPES): RequestType {
 	switch (panelType) {
 		case PANEL_TYPES.TIME_SERIES:
 		case PANEL_TYPES.BAR:
+		case PANEL_TYPES.STATE_TIMELINE:
 			return 'time_series';
 		case PANEL_TYPES.TABLE:
 		case PANEL_TYPES.PIE:

@@ -78,6 +78,7 @@ export default defineConfig(({ mode }): UserConfig => {
 			// this doubles the build tim
 			// disabled to use Biome/tsgo (in the future) as alternative
 			enableBuild: false,
+			overlay: false,
 		}),
 	];
 

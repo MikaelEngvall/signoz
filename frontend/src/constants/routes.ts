@@ -85,6 +85,7 @@ const ROUTES = {
 	METER_EXPLORER: '/meter/explorer',
 	METER_EXPLORER_VIEWS: '/meter/explorer/views',
 	HOME_PAGE: '/',
+	STATE_TIMELINE_DEMO: '/state-timeline-demo',
 	PUBLIC_DASHBOARD: '/public/dashboard/:dashboardId',
 	SERVICE_ACCOUNTS_SETTINGS: '/settings/service-accounts',
 	AI_ASSISTANT: '/ai-assistant/:conversationId',

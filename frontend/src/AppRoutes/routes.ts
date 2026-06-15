@@ -1,4 +1,5 @@
 import { RouteProps } from 'react-router-dom';
+import { lazy } from 'react';
 import ROUTES from 'constants/routes';
 
 import {
@@ -505,6 +506,13 @@ const routes: AppRoutes[] = [
 		exact: true,
 		component: AIAssistantPage,
 		key: 'AI_ASSISTANT',
+		isPrivate: true,
+	},
+	{
+		path: ROUTES.STATE_TIMELINE_DEMO,
+		exact: true,
+		component: lazy(() => import('pages/StateTimelineDemo')),
+		key: 'STATE_TIMELINE_DEMO',
 		isPrivate: true,
 	},
 ];

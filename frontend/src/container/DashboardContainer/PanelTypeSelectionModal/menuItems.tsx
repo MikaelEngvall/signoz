@@ -3,6 +3,7 @@ import { PANEL_TYPES, PanelDisplay } from 'constants/queryBuilder';
 import {
 	BarChart,
 	ChartLine,
+	ChartNoAxesGantt,
 	ChartPie,
 	List,
 	SquareSigma,
@@ -44,6 +45,11 @@ export const PanelTypesWithData: ItemsProps[] = [
 		name: PANEL_TYPES.HISTOGRAM,
 		icon: <BarChart size={16} color={Color.BG_ROBIN_400} />,
 		display: PanelDisplay.HISTOGRAM,
+	},
+	{
+		name: PANEL_TYPES.STATE_TIMELINE,
+		icon: <ChartNoAxesGantt size={16} color={Color.BG_ROBIN_400} />,
+		display: PanelDisplay.STATE_TIMELINE,
 	},
 ];
 

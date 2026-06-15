@@ -31,6 +31,7 @@ export const getComponentForPanelType = (
 		[PANEL_TYPES.BAR]: Uplot,
 		[PANEL_TYPES.PIE]: null,
 		[PANEL_TYPES.HISTOGRAM]: Uplot,
+		[PANEL_TYPES.STATE_TIMELINE]: null,
 		[PANEL_TYPES.EMPTY_WIDGET]: null,
 	};
 

@@ -203,20 +203,27 @@ func (q QueryType) Validate() error {
 type PanelType string
 
 const (
-	PanelTypeValue PanelType = "value"
-	PanelTypeGraph PanelType = "graph"
-	PanelTypeTable PanelType = "table"
-	PanelTypeList  PanelType = "list"
-	PanelTypeTrace PanelType = "trace"
+	PanelTypeValue         PanelType = "value"
+	PanelTypeGraph         PanelType = "graph"
+	PanelTypeTable         PanelType = "table"
+	PanelTypeList          PanelType = "list"
+	PanelTypeTrace         PanelType = "trace"
+	PanelTypeStateTimeline PanelType = "state_timeline"
 )
 
 func (p PanelType) Validate() error {
 	switch p {
-	case PanelTypeValue, PanelTypeGraph, PanelTypeTable, PanelTypeList, PanelTypeTrace:
+	case PanelTypeValue, PanelTypeGraph, PanelTypeTable, PanelTypeList, PanelTypeTrace, PanelTypeStateTimeline:
 		return nil
 	default:
 		return fmt.Errorf("invalid panel type: %s", p)
 	}
+}
+
+// IsGraphLike returns true for panel types that produce time-series data
+// (graph, state_timeline). These types share the same query execution path.
+func (p PanelType) IsGraphLike() bool {
+	return p == PanelTypeGraph || p == PanelTypeStateTimeline
 }
 
 // AggregateAttributeRequest is a request to fetch possible attribute keys

@@ -486,7 +486,7 @@ func (dashboard *Dashboard) GetWidgetQuery(startTime, endTime, widgetIndex uint6
 
 func (dashboard *Dashboard) getQueryRequestTypeFromPanelType(panelType string) querybuildertypesv5.RequestType {
 	switch panelType {
-	case "graph", "bar":
+	case "graph", "bar", "state_timeline":
 		return querybuildertypesv5.RequestTypeTimeSeries
 	case "table", "pie", "value":
 		return querybuildertypesv5.RequestTypeScalar
