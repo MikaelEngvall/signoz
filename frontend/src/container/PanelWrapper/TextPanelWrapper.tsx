@@ -3,6 +3,7 @@ import { MarkdownRenderer } from 'components/MarkdownRenderer/MarkdownRenderer';
 import { PanelWrapperProps } from './panelWrapper.types';
 
 function TextPanelWrapper({ widget }: PanelWrapperProps): JSX.Element {
+	// Use textContent, or fall back to description (both editable in panel settings)
 	const content = (widget as any).textContent || widget.description || '';
 
 	return (

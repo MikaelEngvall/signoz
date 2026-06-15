@@ -70,7 +70,7 @@
       "id": "text-health-check-header",
       "panelTypes": "text",
       "title": "",
-      "description": "",
+      "description": "# Health-Check",
       "textContent": "# Health-Check",
       "opacity": "1",
       "nullZeroValues": "zero",
@@ -209,7 +209,7 @@
           "thresholdColor": "Green",
           "thresholdFormat": "fixed",
           "thresholdOperator": ">=",
-          "thresholdValue": 1
+          "thresholdValue": 0.99
         },
         {
           "thresholdColor": "Yellow",
@@ -721,7 +721,26 @@
       "softMin": 0,
       "spanGaps": true,
       "stackedBarChart": false,
-      "thresholds": [],
+      "thresholds": [
+        {
+          "thresholdColor": "Green",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": ">=",
+          "thresholdValue": 99
+        },
+        {
+          "thresholdColor": "Yellow",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": ">=",
+          "thresholdValue": 80
+        },
+        {
+          "thresholdColor": "Red",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": "<",
+          "thresholdValue": 80
+        }
+      ],
       "title": "Availability % per Service",
       "yAxisUnit": "%",
       "visibleRows": "auto",
