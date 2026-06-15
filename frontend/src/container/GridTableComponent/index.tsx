@@ -124,7 +124,32 @@ function GridTableComponent({
 	);
 
 	const dataSource = useMemo(
-		() => applyColumnUnits(originalDataSource),
+		() => {
+			const data = applyColumnUnits(originalDataSource);
+			// Default sort: by last numeric column desc, then first string column asc
+			if (data.length > 0) {
+				const keys = Object.keys(data[0]).filter((k) => k !== 'key');
+				const numericCols = keys.filter((k) =>
+					data.some((row) => typeof row[k] === 'number' || (!isNaN(Number(row[k])) && row[k] !== '')),
+				);
+				const stringCols = keys.filter((k) =>
+					data.some((row) => typeof row[k] === 'string' && isNaN(Number(row[k]))),
+				);
+				if (numericCols.length > 0 && stringCols.length > 0) {
+					const valueCol = numericCols[numericCols.length - 1];
+					const nameCol = stringCols[0];
+					data.sort((a, b) => {
+						const aVal = Number(a[valueCol]) || 0;
+						const bVal = Number(b[valueCol]) || 0;
+						if (bVal !== aVal) return bVal - aVal; // desc by value
+						const aName = String(a[nameCol] || '').toLowerCase();
+						const bName = String(b[nameCol] || '').toLowerCase();
+						return aName.localeCompare(bName); // asc alphabetic
+					});
+				}
+			}
+			return data;
+		},
 		[applyColumnUnits, originalDataSource],
 	);
 
