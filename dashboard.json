@@ -73,7 +73,6 @@
         {"thresholdColor": "Yellow", "thresholdFormat": "fixed", "thresholdOperator": ">=", "thresholdValue": 0.8},
         {"thresholdColor": "Red", "thresholdFormat": "fixed", "thresholdOperator": "<", "thresholdValue": 0.8}
       ],
-      "timePreferance": "LAST_3_DAYS",
       "title": "Combined Status (All Services)",
       "yAxisUnit": "none"
     },
@@ -137,7 +136,6 @@
         {"thresholdColor": "Yellow", "thresholdFormat": "fixed", "thresholdOperator": ">=", "thresholdValue": 80},
         {"thresholdColor": "Red", "thresholdFormat": "fixed", "thresholdOperator": "<", "thresholdValue": 80}
       ],
-      "timePreferance": "LAST_3_DAYS",
       "title": "Overall Availability (All Services)",
       "yAxisUnit": "%"
     },
@@ -200,7 +198,6 @@
         {"thresholdColor": "Green", "thresholdFormat": "fixed", "thresholdOperator": ">=", "thresholdValue": 0.5},
         {"thresholdColor": "Red", "thresholdFormat": "fixed", "thresholdOperator": "<", "thresholdValue": 0.5}
       ],
-      "timePreferance": "LAST_3_DAYS",
       "title": "Service Status Timeline (All BOS Services)",
       "yAxisUnit": "none"
     },
@@ -261,7 +258,6 @@
       "spanGaps": true,
       "stackedBarChart": false,
       "thresholds": [],
-      "timePreferance": "LAST_1_HR",
       "title": "Latest Status (1=Passed, 0=Failed)",
       "yAxisUnit": "none"
     },
@@ -322,7 +318,6 @@
       "spanGaps": true,
       "stackedBarChart": false,
       "thresholds": [],
-      "timePreferance": "LAST_3_DAYS",
       "title": "Availability % per Service",
       "yAxisUnit": "%"
     }
