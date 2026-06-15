@@ -50,6 +50,7 @@ function GridTableComponent({
 	queryRangeRequest,
 	decimalPrecision,
 	hiddenColumns = [],
+	visibleRows,
 	...props
 }: GridTableComponentProps): JSX.Element {
 	const { t } = useTranslation(['valueGraph']);
@@ -285,6 +286,7 @@ function GridTableComponent({
 				columnWidths={columnWidths}
 				onColumnWidthsChange={onColumnWidthsChange}
 				panelType={panelType}
+					visibleRows={visibleRows}
 				queryRangeRequest={queryRangeRequest}
 				onRow={
 					openTracesButton || customOnRowClick

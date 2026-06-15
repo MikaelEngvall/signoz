@@ -545,7 +545,8 @@
       "stackedBarChart": false,
       "thresholds": [],
       "title": "Latest Status (1=Passed, 0=Failed)",
-      "yAxisUnit": "none"
+      "yAxisUnit": "none",
+      "visibleRows": "auto"
     },
     {
       "bucketCount": 30,
@@ -667,7 +668,8 @@
       "stackedBarChart": false,
       "thresholds": [],
       "title": "Availability % per Service",
-      "yAxisUnit": "%"
+      "yAxisUnit": "%",
+      "visibleRows": "auto"
     }
   ]
 }
