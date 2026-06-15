@@ -160,7 +160,7 @@ export function transformSeriesToSwimLanes(
 	thresholds: ThresholdProps[],
 	isDarkMode: boolean,
 	legendTemplate?: string,
-	treatZeroAsNull = true,
+	treatZeroAsNull = false,
 ): SwimLaneModel {
 	const defaultColor = isDarkMode ? DEFAULT_COLOR_DARK : DEFAULT_COLOR_LIGHT;
 

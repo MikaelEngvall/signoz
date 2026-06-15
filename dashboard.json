@@ -415,13 +415,19 @@
           "thresholdColor": "Green",
           "thresholdFormat": "fixed",
           "thresholdOperator": ">=",
-          "thresholdValue": 0.5
+          "thresholdValue": 1
+        },
+        {
+          "thresholdColor": "Yellow",
+          "thresholdFormat": "fixed",
+          "thresholdOperator": ">",
+          "thresholdValue": 0
         },
         {
           "thresholdColor": "Red",
           "thresholdFormat": "fixed",
-          "thresholdOperator": "<",
-          "thresholdValue": 0.5
+          "thresholdOperator": "<=",
+          "thresholdValue": 0
         }
       ],
       "title": "Service Status Timeline (All BOS Services)",
