@@ -108,6 +108,13 @@ status_check() {
         echo -e "  ${RED}✗${NC} Frontend           not running"
     fi
 
+    # WARP routing
+    if ip rule show 2>/dev/null | grep -q "from 172.18.0.0/16 lookup 65743"; then
+        echo -e "  ${GREEN}✓${NC} WARP routing       k3d → Ericsson internal via CloudflareWARP"
+    elif ip link show CloudflareWARP &>/dev/null; then
+        echo -e "  ${RED}✗${NC} WARP routing       NOT configured (run start-local-dev.sh to fix)"
+    fi
+
     echo ""
 }
 
@@ -131,6 +138,38 @@ echo ""
 # Stop anything that might conflict
 stop_all 2>/dev/null || true
 sleep 2
+
+# ─── Fix k3d → Cloudflare WARP VPN routing ──────────────────────────────────
+# Docker containers (k3d pods) can't reach Ericsson internal services unless
+# their traffic is routed through the WARP tunnel (table 65743).
+fix_warp_routing() {
+    local WARP_TABLE=65743
+    local K3D_NETWORK="172.18.0.0/16"
+    local DOCKER_BRIDGE="172.17.0.0/16"
+    local WARP_IFACE="CloudflareWARP"
+
+    # Only apply if WARP interface exists
+    if ! ip link show "$WARP_IFACE" &>/dev/null; then
+        return 0
+    fi
+
+    echo -e "${YELLOW}[0/4] Fixing WARP VPN routing for Docker/k3d...${NC}"
+
+    # Add ip rule so k3d traffic uses WARP routing table
+    if ! ip rule show | grep -q "from ${K3D_NETWORK} lookup ${WARP_TABLE}"; then
+        sudo ip rule add from ${K3D_NETWORK} lookup ${WARP_TABLE} priority 32764 2>/dev/null || true
+    fi
+
+    # MASQUERADE rules for Docker → WARP
+    sudo iptables -t nat -C POSTROUTING -s ${K3D_NETWORK} -o ${WARP_IFACE} -j MASQUERADE 2>/dev/null || \
+        sudo iptables -t nat -A POSTROUTING -s ${K3D_NETWORK} -o ${WARP_IFACE} -j MASQUERADE 2>/dev/null || true
+    sudo iptables -t nat -C POSTROUTING -s ${DOCKER_BRIDGE} -o ${WARP_IFACE} -j MASQUERADE 2>/dev/null || \
+        sudo iptables -t nat -A POSTROUTING -s ${DOCKER_BRIDGE} -o ${WARP_IFACE} -j MASQUERADE 2>/dev/null || true
+
+    echo -e "${GREEN}  ✓ WARP routing rules applied (k3d pods can reach Ericsson internal services)${NC}"
+}
+
+fix_warp_routing
 
 # ─── 1. Start ClickHouse + ZooKeeper ────────────────────────────────────────
 echo -e "${YELLOW}[1/4] Starting ClickHouse (make devenv-clickhouse)...${NC}"

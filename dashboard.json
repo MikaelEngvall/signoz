@@ -170,7 +170,7 @@
               "orderBy": [],
               "queryName": "A",
               "reduceTo": "last",
-              "spaceAggregation": "avg",
+              "spaceAggregation": "max",
               "stepInterval": 900,
               "timeAggregation": "latest"
             }
@@ -290,7 +290,7 @@
               "orderBy": [],
               "queryName": "A",
               "reduceTo": "avg",
-              "spaceAggregation": "min",
+              "spaceAggregation": "max",
               "stepInterval": 3600,
               "timeAggregation": "avg"
             }
@@ -426,7 +426,7 @@
               "orderBy": [],
               "queryName": "A",
               "reduceTo": "last",
-              "spaceAggregation": "avg",
+              "spaceAggregation": "max",
               "stepInterval": 900,
               "timeAggregation": "latest"
             }
@@ -559,7 +559,7 @@
               "orderBy": [],
               "queryName": "A",
               "reduceTo": "last",
-              "spaceAggregation": "min",
+              "spaceAggregation": "max",
               "stepInterval": 900,
               "timeAggregation": "latest"
             }
