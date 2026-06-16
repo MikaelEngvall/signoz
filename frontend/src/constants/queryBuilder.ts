@@ -605,6 +605,7 @@ export const PANEL_TYPES_INITIAL_QUERY: Record<PANEL_TYPES, Query> = {
 	[PANEL_TYPES.PIE]: initialQueriesMap.metrics,
 	[PANEL_TYPES.HISTOGRAM]: initialQueriesMap.metrics,
 	[PANEL_TYPES.STATE_TIMELINE]: initialQueriesMap.metrics,
+	[PANEL_TYPES.TEXT]: initialQueriesMap.metrics,
 	[PANEL_TYPES.EMPTY_WIDGET]: initialQueriesMap.metrics,
 };
 

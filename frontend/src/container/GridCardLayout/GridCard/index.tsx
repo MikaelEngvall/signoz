@@ -294,7 +294,7 @@ function GridCardGraph({
 			{isEmptyLayout ? (
 				<EmptyWidget />
 			) : isTextPanel ? (
-				<TextPanelWrapper widget={widget} queryResponse={queryResponse} onDragSelect={(): void => {}} panelMode="view" />
+				<TextPanelWrapper widget={widget} queryResponse={queryResponse} onDragSelect={(): void => {}} panelMode={"view" as any} />
 			) : (
 				<WidgetGraphComponent
 					widget={widget}

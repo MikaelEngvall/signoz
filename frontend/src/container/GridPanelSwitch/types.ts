@@ -45,5 +45,6 @@ export type PropsTypePropsMap = {
 	};
 	[PANEL_TYPES.HISTOGRAM]: null;
 	[PANEL_TYPES.STATE_TIMELINE]: null;
+	[PANEL_TYPES.TEXT]: null;
 	[PANEL_TYPES.EMPTY_WIDGET]: null;
 };

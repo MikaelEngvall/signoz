@@ -89,16 +89,47 @@ function LeftContainer({
 				isCancelled={isCancelled}
 			/>
 			<QueryContainer className="query-section-left-container">
-				<QuerySection
-					selectedGraph={selectedGraph}
-					isLoadingQueries={queryResponse.isFetching}
-					handleCancelQuery={handleCancelQuery}
-					selectedWidget={selectedWidget}
-					dashboardVersion={ENTITY_VERSION_V5}
-					dashboardId={dashboardData?.id}
-					dashboardName={dashboardData?.data.title}
-					isNewPanel={isNewPanel}
-				/>
+				{selectedGraph === PANEL_TYPES.TEXT ? (
+					<div style={{ padding: '16px' }}>
+						<div style={{ marginBottom: '8px', fontWeight: 500 }}>Panel Content (Markdown)</div>
+						<textarea
+							style={{
+								width: '100%',
+								minHeight: '200px',
+								backgroundColor: '#1a1a2e',
+								color: '#fff',
+								border: '1px solid #333',
+								borderRadius: '4px',
+								padding: '12px',
+								fontFamily: 'monospace',
+								fontSize: '13px',
+								resize: 'vertical',
+							}}
+							value={(selectedWidget as any)?.textContent || selectedWidget?.description || ''}
+							onChange={(e): void => {
+								if (selectedWidget) {
+									(selectedWidget as any).textContent = e.target.value;
+									(selectedWidget as any).description = e.target.value;
+								}
+							}}
+							placeholder="Enter markdown content here...&#10;&#10;# Heading&#10;**Bold** or *italic* text&#10;[Link](https://example.com)"
+						/>
+						<div style={{ marginTop: '8px', fontSize: '11px', color: '#888' }}>
+							Supports markdown: # headings, **bold**, *italic*, [links](url), lists
+						</div>
+					</div>
+				) : (
+					<QuerySection
+						selectedGraph={selectedGraph}
+						isLoadingQueries={queryResponse.isFetching}
+						handleCancelQuery={handleCancelQuery}
+						selectedWidget={selectedWidget}
+						dashboardVersion={ENTITY_VERSION_V5}
+						dashboardId={dashboardData?.id}
+						dashboardName={dashboardData?.data.title}
+						isNewPanel={isNewPanel}
+					/>
+				)}
 				{selectedGraph === PANEL_TYPES.LIST && (
 					<ExplorerColumnsRenderer
 						selectedLogFields={selectedLogFields}

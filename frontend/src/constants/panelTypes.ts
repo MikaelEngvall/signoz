@@ -13,7 +13,8 @@ export const PANEL_TYPES_COMPONENT_MAP = {
 	[PANEL_TYPES.TABLE]: GridTableComponent,
 	[PANEL_TYPES.TRACE]: null,
 	[PANEL_TYPES.LIST]: LogsPanelComponent,
-	[PANEL_TYPES.EMPTY_WIDGET]: null,
+	[PANEL_TYPES.TEXT]: null,
+		[PANEL_TYPES.EMPTY_WIDGET]: null,
 	[PANEL_TYPES.BAR]: Uplot,
 } as const;
 
@@ -32,6 +33,7 @@ export const getComponentForPanelType = (
 		[PANEL_TYPES.PIE]: null,
 		[PANEL_TYPES.HISTOGRAM]: Uplot,
 		[PANEL_TYPES.STATE_TIMELINE]: null,
+		[PANEL_TYPES.TEXT]: null,
 		[PANEL_TYPES.EMPTY_WIDGET]: null,
 	};
 
