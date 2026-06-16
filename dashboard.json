@@ -158,6 +158,19 @@
                     },
                     "op": "=",
                     "value": "BOS"
+                  },
+                  {
+                    "id": "filter-health-check-type",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_type--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_type",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "Health-Check"
                   }
                 ],
                 "op": "AND"
@@ -180,18 +193,18 @@
         "clickhouse_sql": [
           {
             "disabled": false,
-            "legend": "",
+            "legend": "All Services",
             "name": "A",
-            "query": ""
+            "query": "SELECT toStartOfInterval(toDateTime(intDiv(unix_milli, 1000)), INTERVAL 900 SECOND) AS ts, max(value) AS value FROM signoz_metrics.samples_v4 s INNER JOIN signoz_metrics.time_series_v4 t ON s.fingerprint = t.fingerprint WHERE t.metric_name = 'cicd_pipeline_test_verdict' AND JSONExtractString(t.labels, 'cicd_test_case_group') = 'BOS' AND JSONExtractString(t.labels, 'cicd_test_case_type') = 'Health-Check' AND s.unix_milli >= {{.start_timestamp_ms}} AND s.unix_milli <= {{.end_timestamp_ms}} GROUP BY ts ORDER BY ts"
           }
         ],
         "id": "query-86ba5be8-combined-status",
         "promql": [
           {
             "disabled": false,
-            "legend": "",
+            "legend": "All Services",
             "name": "A",
-            "query": "avg(min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}))"
+            "query": "avg(max by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\",cicd_test_case_type=\"Health-Check\"}))"
           }
         ],
         "queryType": "builder",
@@ -278,19 +291,41 @@
                     },
                     "op": "=",
                     "value": "BOS"
+                  },
+                  {
+                    "id": "filter-health-check-type",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_type--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_type",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "Health-Check"
                   }
                 ],
                 "op": "AND"
               },
               "functions": [],
-              "groupBy": [],
+              "groupBy": [
+                {
+                  "dataType": "string",
+                  "id": "cicd_test_case_service--string--tag--false",
+                  "isColumn": false,
+                  "isJSON": false,
+                  "key": "cicd_test_case_service",
+                  "type": "tag"
+                }
+              ],
               "having": [],
               "legend": "Availability",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
               "reduceTo": "avg",
-              "spaceAggregation": "max",
+              "spaceAggregation": "avg",
               "stepInterval": 3600,
               "timeAggregation": "avg"
             }
@@ -307,9 +342,9 @@
         "clickhouse_sql": [
           {
             "disabled": false,
-            "legend": "",
+            "legend": "Availability %",
             "name": "A",
-            "query": ""
+            "query": "SELECT avg(service_avg) * 100 as value FROM (SELECT JSONExtractString(labels, 'cicd_test_case_service') as service, avg(value) as service_avg FROM signoz_metrics.samples_v4 s INNER JOIN signoz_metrics.time_series_v4 ts ON s.fingerprint = ts.fingerprint WHERE ts.metric_name = 'cicd_pipeline_test_verdict' AND JSONExtractString(ts.labels, 'cicd_test_case_group') = 'BOS' AND JSONExtractString(ts.labels, 'cicd_test_case_type') = 'Health-Check' AND s.unix_milli >= {{.start_timestamp_ms}} AND s.unix_milli <= {{.end_timestamp_ms}} GROUP BY service)"
           }
         ],
         "id": "query-0ee8f9a4-overall-availability",
@@ -318,10 +353,10 @@
             "disabled": false,
             "legend": "Availability %",
             "name": "A",
-            "query": "avg(avg by (cicd_test_case_service) (avg_over_time(cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}[3d]))) * 100"
+            "query": "avg(avg by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\",cicd_test_case_type=\"Health-Check\"})) * 100"
           }
         ],
-        "queryType": "promql",
+        "queryType": "clickhouse_sql",
         "unit": ""
       },
       "selectedLogFields": [],
@@ -405,6 +440,19 @@
                     },
                     "op": "=",
                     "value": "BOS"
+                  },
+                  {
+                    "id": "filter-health-check-type",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_type--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_type",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "Health-Check"
                   }
                 ],
                 "op": "AND"
@@ -436,9 +484,9 @@
         "clickhouse_sql": [
           {
             "disabled": false,
-            "legend": "",
+            "legend": "{{service}}",
             "name": "A",
-            "query": ""
+            "query": "SELECT toStartOfInterval(toDateTime(intDiv(unix_milli, 1000)), INTERVAL 900 SECOND) AS ts, JSONExtractString(labels, 'cicd_test_case_service') AS service, max(value) AS value FROM signoz_metrics.samples_v4 s INNER JOIN signoz_metrics.time_series_v4 ts ON s.fingerprint = ts.fingerprint WHERE ts.metric_name = 'cicd_pipeline_test_verdict' AND JSONExtractString(ts.labels, 'cicd_test_case_group') = 'BOS' AND JSONExtractString(ts.labels, 'cicd_test_case_type') = 'Health-Check' AND s.unix_milli >= {{.start_timestamp_ms}} AND s.unix_milli <= {{.end_timestamp_ms}} GROUP BY ts, service ORDER BY ts"
           }
         ],
         "id": "query-state-timeline-all",
@@ -447,7 +495,7 @@
             "disabled": false,
             "legend": "{{cicd_test_case_service}}",
             "name": "A",
-            "query": "min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"})"
+            "query": "max by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\",cicd_test_case_type=\"Health-Check\"})"
           }
         ],
         "queryType": "builder",
@@ -538,6 +586,19 @@
                     },
                     "op": "=",
                     "value": "BOS"
+                  },
+                  {
+                    "id": "filter-health-check-type",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_type--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_type",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "Health-Check"
                   }
                 ],
                 "op": "AND"
@@ -569,18 +630,18 @@
         "clickhouse_sql": [
           {
             "disabled": false,
-            "legend": "",
+            "legend": "{{service}}",
             "name": "A",
-            "query": ""
+            "query": "SELECT JSONExtractString(labels, 'cicd_test_case_service') AS service, argMax(value, unix_milli) AS value FROM signoz_metrics.samples_v4 s INNER JOIN signoz_metrics.time_series_v4 ts ON s.fingerprint = ts.fingerprint WHERE ts.metric_name = 'cicd_pipeline_test_verdict' AND JSONExtractString(ts.labels, 'cicd_test_case_group') = 'BOS' AND JSONExtractString(ts.labels, 'cicd_test_case_type') = 'Health-Check' AND s.unix_milli >= {{.start_timestamp_ms}} AND s.unix_milli <= {{.end_timestamp_ms}} GROUP BY service ORDER BY value DESC, service ASC"
           }
         ],
         "id": "query-307f34f1-latest-status",
         "promql": [
           {
             "disabled": false,
-            "legend": "",
+            "legend": "{{cicd_test_case_service}}",
             "name": "A",
-            "query": "min by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"})"
+            "query": "max by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\",cicd_test_case_type=\"Health-Check\"})"
           }
         ],
         "queryType": "builder",
@@ -659,6 +720,19 @@
                     },
                     "op": "=",
                     "value": "BOS"
+                  },
+                  {
+                    "id": "filter-health-check-type",
+                    "key": {
+                      "dataType": "string",
+                      "id": "cicd_test_case_type--string--tag--false",
+                      "isColumn": false,
+                      "isJSON": false,
+                      "key": "cicd_test_case_type",
+                      "type": "tag"
+                    },
+                    "op": "=",
+                    "value": "Health-Check"
                   }
                 ],
                 "op": "AND"
@@ -697,18 +771,18 @@
         "clickhouse_sql": [
           {
             "disabled": false,
-            "legend": "",
+            "legend": "{{service}}",
             "name": "A",
-            "query": ""
+            "query": "SELECT JSONExtractString(labels, 'cicd_test_case_service') AS service, avg(value) * 100 AS value FROM signoz_metrics.samples_v4 s INNER JOIN signoz_metrics.time_series_v4 ts ON s.fingerprint = ts.fingerprint WHERE ts.metric_name = 'cicd_pipeline_test_verdict' AND JSONExtractString(ts.labels, 'cicd_test_case_group') = 'BOS' AND JSONExtractString(ts.labels, 'cicd_test_case_type') = 'Health-Check' AND s.unix_milli >= {{.start_timestamp_ms}} AND s.unix_milli <= {{.end_timestamp_ms}} GROUP BY service ORDER BY value DESC, service ASC"
           }
         ],
         "id": "query-d1e17bb9-availability",
         "promql": [
           {
             "disabled": false,
-            "legend": "",
+            "legend": "{{cicd_test_case_service}}",
             "name": "A",
-            "query": "avg by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\"}) * 100"
+            "query": "avg by (cicd_test_case_service) (cicd_pipeline_test_verdict{cicd_test_case_group=\"BOS\",cicd_test_case_type=\"Health-Check\"}) * 100"
           }
         ],
         "queryType": "builder",

@@ -13,16 +13,35 @@ import StateTimelinePanel from 'container/DashboardContainer/visualization/panel
 import { transformSeriesToSwimLanes } from 'container/DashboardContainer/visualization/panels/StateTimelinePanel/utils/transformData';
 import { SwimLaneModel } from 'container/DashboardContainer/visualization/panels/StateTimelinePanel/utils/transformData';
 import { ThresholdProps } from 'container/NewWidget/RightContainer/Threshold/types';
+import { PANEL_TYPES } from 'constants/queryBuilder';
 
 // Generate mock data simulating BOS services
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function generateMockQueryData() {
 	const services = [
-		'aca', 'arm', 'codechecker', 'dpraf', 'elasticsearch',
-		'eridoc', 'evms', 'ews', 'fossa', 'git',
-		'gitca', 'jenkins', 'jira', 'mimer', 'hydra',
-		'kronos', 'malwarescan', 'pki', 'plmws', 'scas',
-		'sonarqube', 'spinnaker', 'wallix',
+		'aca',
+		'arm',
+		'codechecker',
+		'dpraf',
+		'elasticsearch',
+		'eridoc',
+		'evms',
+		'ews',
+		'fossa',
+		'git',
+		'gitca',
+		'jenkins',
+		'jira',
+		'mimer',
+		'hydra',
+		'kronos',
+		'malwarescan',
+		'pki',
+		'plmws',
+		'scas',
+		'sonarqube',
+		'spinnaker',
+		'wallix',
 	];
 
 	const now = Math.floor(Date.now() / 1000);
@@ -33,7 +52,9 @@ function generateMockQueryData() {
 		const values = [];
 		for (let t = twoDaysAgo; t <= now; t += stepInterval) {
 			const isFlaky = ['jenkins', 'sonarqube', 'hydra'].includes(service);
-			const isIntermittent = ['evms', 'arm', 'gitca', 'elasticsearch'].includes(service);
+			const isIntermittent = ['evms', 'arm', 'gitca', 'elasticsearch'].includes(
+				service,
+			);
 			let value = '1'; // pass
 			if (isFlaky && Math.random() < 0.3) {
 				value = '0'; // fail
@@ -55,11 +76,13 @@ function generateMockQueryData() {
 		};
 	});
 
-	return [{
-		series,
-		list: null,
-		queryName: 'A',
-	}];
+	return [
+		{
+			series,
+			list: null,
+			queryName: 'A',
+		},
+	];
 }
 
 /**
@@ -69,7 +92,9 @@ function generateMockQueryData() {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function generateCombinedQueryData(allServiceData: any[]) {
 	const series = allServiceData[0].series;
-	if (!series || series.length === 0) return [{ series: null, list: null, queryName: 'A' }];
+	if (!series || series.length === 0) {
+		return [{ series: null, list: null, queryName: 'A' }];
+	}
 
 	const numTimestamps = series[0].values.length;
 	const combinedValues = [];
@@ -85,25 +110,35 @@ function generateCombinedQueryData(allServiceData: any[]) {
 		combinedValues.push({ timestamp, value: String(avg) });
 	}
 
-	return [{
-		series: [{
-			labels: { service: 'All Services' },
-			labelsArray: [{ service: 'All Services' }],
-			values: combinedValues,
-		}],
-		list: null,
-		queryName: 'A',
-	}];
+	return [
+		{
+			series: [
+				{
+					labels: { service: 'All Services' },
+					labelsArray: [{ service: 'All Services' }],
+					values: combinedValues,
+				},
+			],
+			list: null,
+			queryName: 'A',
+		},
+	];
 }
 
 function StateTimelineDemo(): JSX.Element {
 	const isDarkMode = useIsDarkMode();
 
 	const queryData = useMemo(() => generateMockQueryData(), []);
-	const combinedData = useMemo(() => generateCombinedQueryData(queryData), [queryData]);
+	const combinedData = useMemo(
+		() => generateCombinedQueryData(queryData),
+		[queryData],
+	);
 
 	const now = Math.floor(Date.now() / 1000);
-	const [timeRange, setTimeRange] = useState({ start: now - 2 * 86400, end: now });
+	const [timeRange, setTimeRange] = useState({
+		start: now - 2 * 86400,
+		end: now,
+	});
 
 	// Time range presets
 	const timePresets = [
@@ -116,8 +151,14 @@ function StateTimelineDemo(): JSX.Element {
 		{ label: '7d', seconds: 7 * 86400 },
 	];
 
+	const noopMove = (): void => {};
+
 	const thresholds: ThresholdProps[] = [
 		{
+			index: '0',
+			keyIndex: 0,
+			moveThreshold: noopMove,
+			selectedGraph: PANEL_TYPES.STATE_TIMELINE,
 			thresholdColor: '#73BF69', // Grafana's green
 			thresholdFormat: 'Background',
 			thresholdOperator: '>=',
@@ -125,6 +166,10 @@ function StateTimelineDemo(): JSX.Element {
 			thresholdLabel: 'Passed',
 		},
 		{
+			index: '1',
+			keyIndex: 1,
+			moveThreshold: noopMove,
+			selectedGraph: PANEL_TYPES.STATE_TIMELINE,
 			thresholdColor: '#FADE2A', // Grafana's yellow
 			thresholdFormat: 'Background',
 			thresholdOperator: '>',
@@ -132,6 +177,10 @@ function StateTimelineDemo(): JSX.Element {
 			thresholdLabel: 'Intermittent',
 		},
 		{
+			index: '2',
+			keyIndex: 2,
+			moveThreshold: noopMove,
+			selectedGraph: PANEL_TYPES.STATE_TIMELINE,
 			thresholdColor: '#F2495C', // Grafana's red
 			thresholdFormat: 'Background',
 			thresholdOperator: '<=',
@@ -143,6 +192,10 @@ function StateTimelineDemo(): JSX.Element {
 	// Combined status uses different thresholds (average-based)
 	const combinedThresholds: ThresholdProps[] = [
 		{
+			index: '0',
+			keyIndex: 0,
+			moveThreshold: noopMove,
+			selectedGraph: PANEL_TYPES.STATE_TIMELINE,
 			thresholdColor: '#73BF69', // green — all services passing
 			thresholdFormat: 'Background',
 			thresholdOperator: '>=',
@@ -150,6 +203,10 @@ function StateTimelineDemo(): JSX.Element {
 			thresholdLabel: 'All Passed',
 		},
 		{
+			index: '1',
+			keyIndex: 1,
+			moveThreshold: noopMove,
+			selectedGraph: PANEL_TYPES.STATE_TIMELINE,
 			thresholdColor: '#FADE2A', // yellow — some intermittent
 			thresholdFormat: 'Background',
 			thresholdOperator: '>=',
@@ -157,6 +214,10 @@ function StateTimelineDemo(): JSX.Element {
 			thresholdLabel: 'Degraded',
 		},
 		{
+			index: '2',
+			keyIndex: 2,
+			moveThreshold: noopMove,
+			selectedGraph: PANEL_TYPES.STATE_TIMELINE,
 			thresholdColor: '#F2495C', // red — significant failures
 			thresholdFormat: 'Background',
 			thresholdOperator: '<',
@@ -166,24 +227,26 @@ function StateTimelineDemo(): JSX.Element {
 	];
 
 	const swimLaneModel: SwimLaneModel = useMemo(
-		() => transformSeriesToSwimLanes(
-			queryData,
-			timeRange,
-			thresholds,
-			isDarkMode,
-			'{{cicd_test_case_service}}',
-		),
+		() =>
+			transformSeriesToSwimLanes(
+				queryData,
+				timeRange,
+				thresholds,
+				isDarkMode,
+				'{{cicd_test_case_service}}',
+			),
 		[queryData, timeRange, thresholds, isDarkMode],
 	);
 
 	const combinedModel: SwimLaneModel = useMemo(
-		() => transformSeriesToSwimLanes(
-			combinedData,
-			timeRange,
-			combinedThresholds,
-			isDarkMode,
-			'{{service}}',
-		),
+		() =>
+			transformSeriesToSwimLanes(
+				combinedData,
+				timeRange,
+				combinedThresholds,
+				isDarkMode,
+				'{{service}}',
+			),
 		[combinedData, timeRange, combinedThresholds, isDarkMode],
 	);
 
@@ -191,7 +254,10 @@ function StateTimelineDemo(): JSX.Element {
 
 	// Drag-to-zoom: update local time range
 	const handleDragSelect = (startMs: number, endMs: number): void => {
-		setTimeRange({ start: Math.floor(startMs / 1000), end: Math.floor(endMs / 1000) });
+		setTimeRange({
+			start: Math.floor(startMs / 1000),
+			end: Math.floor(endMs / 1000),
+		});
 	};
 
 	const handleResetZoom = (): void => {
@@ -204,16 +270,25 @@ function StateTimelineDemo(): JSX.Element {
 	};
 
 	return (
-		<div style={{
-			padding: '16px 24px',
-			width: '100%',
-			height: '100vh',
-			backgroundColor: isDarkMode ? '#121317' : '#ffffff',
-			color: isDarkMode ? '#e0e0e0' : '#1a1a1a',
-			overflow: 'auto',
-		}}>
+		<div
+			style={{
+				padding: '16px 24px',
+				width: '100%',
+				height: '100vh',
+				backgroundColor: isDarkMode ? '#121317' : '#ffffff',
+				color: isDarkMode ? '#e0e0e0' : '#1a1a1a',
+				overflow: 'auto',
+			}}
+		>
 			{/* Top bar with title and time picker */}
-			<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					marginBottom: '12px',
+				}}
+			>
 				<h1 style={{ fontSize: '18px', margin: 0, fontWeight: 600 }}>
 					Health-Check Overview
 				</h1>
@@ -225,7 +300,10 @@ function StateTimelineDemo(): JSX.Element {
 							style={{
 								padding: '4px 10px',
 								fontSize: '12px',
-								backgroundColor: (timeRange.end - timeRange.start) === preset.seconds ? '#3b82f6' : '#2c2d33',
+								backgroundColor:
+									timeRange.end - timeRange.start === preset.seconds
+										? '#3b82f6'
+										: '#2c2d33',
 								color: '#c8ccd4',
 								border: '1px solid #3c3d43',
 								borderRadius: '3px',
@@ -254,19 +332,30 @@ function StateTimelineDemo(): JSX.Element {
 			</div>
 			{/* Combined Status History */}
 			<div style={{ marginBottom: '12px' }}>
-				<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-					<h2 style={{ fontSize: '14px', fontWeight: 500, margin: 0, color: '#9ca3af' }}>
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						alignItems: 'center',
+						marginBottom: '6px',
+					}}
+				>
+					<h2
+						style={{ fontSize: '14px', fontWeight: 500, margin: 0, color: '#9ca3af' }}
+					>
 						Combined Status History
 					</h2>
 				</div>
-				<div style={{
-					width: '100%',
-					height: '80px',
-					border: `1px solid ${isDarkMode ? '#2c2d33' : '#e5e7eb'}`,
-					borderRadius: '4px',
-					overflow: 'hidden',
-					backgroundColor: '#181b1f',
-				}}>
+				<div
+					style={{
+						width: '100%',
+						height: '80px',
+						border: `1px solid ${isDarkMode ? '#2c2d33' : '#e5e7eb'}`,
+						borderRadius: '4px',
+						overflow: 'hidden',
+						backgroundColor: '#181b1f',
+					}}
+				>
 					<StateTimelinePanel
 						swimLaneModel={combinedModel}
 						width={panelWidth}
@@ -284,16 +373,19 @@ function StateTimelineDemo(): JSX.Element {
 					Status History
 				</h2>
 				<p style={{ fontSize: '12px', opacity: 0.6, marginBottom: '8px' }}>
-					23 BOS services • Green = Passed (=1) • Yellow = Intermittent (0&lt;x&lt;1) • Red = Failed (≤0) • Last 2 days
+					23 BOS services • Green = Passed (=1) • Yellow = Intermittent (0&lt;x&lt;1)
+					• Red = Failed (≤0) • Last 2 days
 				</p>
-				<div style={{
-					width: '100%',
-					height: 'calc(100vh - 240px)',
-					border: `1px solid ${isDarkMode ? '#2c2d33' : '#e5e7eb'}`,
-					borderRadius: '4px',
-					overflow: 'hidden',
-					backgroundColor: '#181b1f',
-				}}>
+				<div
+					style={{
+						width: '100%',
+						height: 'calc(100vh - 240px)',
+						border: `1px solid ${isDarkMode ? '#2c2d33' : '#e5e7eb'}`,
+						borderRadius: '4px',
+						overflow: 'hidden',
+						backgroundColor: '#181b1f',
+					}}
+				>
 					<StateTimelinePanel
 						swimLaneModel={swimLaneModel}
 						width={panelWidth}

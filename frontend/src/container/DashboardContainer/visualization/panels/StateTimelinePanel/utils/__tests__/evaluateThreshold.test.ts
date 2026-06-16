@@ -10,7 +10,6 @@ function makeThreshold(
 ): ThresholdProps {
 	return {
 		index: String(overrides.keyIndex),
-		keyIndex: overrides.keyIndex,
 		moveThreshold: jest.fn(),
 		selectedGraph: PANEL_TYPES.STATE_TIMELINE,
 		...overrides,
@@ -65,7 +64,7 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(null, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: DEFAULT_COLOR });
+		expect(result).toStrictEqual({ color: DEFAULT_COLOR });
 	});
 
 	it('returns defaultColor for NaN value', () => {
@@ -79,7 +78,7 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(NaN, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: DEFAULT_COLOR });
+		expect(result).toStrictEqual({ color: DEFAULT_COLOR });
 	});
 
 	it('returns first matching threshold color and label', () => {
@@ -101,7 +100,7 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(90, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: '#FF0000', label: 'Critical' });
+		expect(result).toStrictEqual({ color: '#FF0000', label: 'Critical' });
 	});
 
 	it('applies first-match semantics and returns second rule when first does not match', () => {
@@ -123,7 +122,7 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(60, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: '#FFAA00', label: 'Warning' });
+		expect(result).toStrictEqual({ color: '#FFAA00', label: 'Warning' });
 	});
 
 	it('returns defaultColor when no threshold matches', () => {
@@ -137,12 +136,12 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(50, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: DEFAULT_COLOR });
+		expect(result).toStrictEqual({ color: DEFAULT_COLOR });
 	});
 
 	it('returns defaultColor when thresholds array is empty', () => {
 		const result = evaluateThreshold(50, [], DEFAULT_COLOR);
-		expect(result).toEqual({ color: DEFAULT_COLOR });
+		expect(result).toStrictEqual({ color: DEFAULT_COLOR });
 	});
 
 	it('skips rules with missing thresholdValue', () => {
@@ -164,7 +163,7 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(50, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: '#00FF00', label: 'OK' });
+		expect(result).toStrictEqual({ color: '#00FF00', label: 'OK' });
 	});
 
 	it('skips rules with missing operator', () => {
@@ -186,7 +185,7 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(50, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: '#00FF00', label: 'Exact' });
+		expect(result).toStrictEqual({ color: '#00FF00', label: 'Exact' });
 	});
 
 	it('uses defaultColor when matching threshold has no color', () => {
@@ -201,7 +200,7 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(10, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: DEFAULT_COLOR, label: 'No color' });
+		expect(result).toStrictEqual({ color: DEFAULT_COLOR, label: 'No color' });
 	});
 
 	it('returns result without label when threshold has no label', () => {
@@ -215,7 +214,7 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(10, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: '#FF0000', label: undefined });
+		expect(result).toStrictEqual({ color: '#FF0000', label: undefined });
 	});
 
 	it('handles thresholdValue of 0 correctly', () => {
@@ -230,6 +229,6 @@ describe('evaluateThreshold', () => {
 		];
 
 		const result = evaluateThreshold(0, thresholds, DEFAULT_COLOR);
-		expect(result).toEqual({ color: '#0000FF', label: 'Zero' });
+		expect(result).toStrictEqual({ color: '#0000FF', label: 'Zero' });
 	});
 });
